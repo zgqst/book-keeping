@@ -3,26 +3,31 @@ import VueRouter, {RouteConfig} from 'vue-router';
 import Money from '@/views/Money.vue';
 import Statistic from '@/views/Statistic.vue';
 import Labels from '@/views/Labels.vue';
+import NotFound from '@/views/NotFound.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    component: Money,
+    redirect: '/money',
   },
   {
     path: '/money',
     component: Money,
   },
   {
-    path:'/labels',
-    component:Labels
-  },{
-  path:'/statistic',
-    component:Statistic
-  }
-
+    path: '/labels',
+    component: Labels,
+  },
+  {
+    path: '/statistic',
+    component: Statistic,
+  },
+  {
+    path: '*',
+    component: NotFound,
+  },
 ];
 
 const router = new VueRouter({
