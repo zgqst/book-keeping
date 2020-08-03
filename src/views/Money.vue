@@ -1,6 +1,7 @@
 <template>
-  <div>money
-    <Nav></Nav>
+  <div>
+    <Layout>
+      money</Layout>
   </div>
 
 </template>
@@ -10,7 +11,3 @@ export default {
   name: 'Money',
 };
 </script>
-
-<style scoped lang="scss">
-
-</style>

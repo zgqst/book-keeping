@@ -1,6 +1,6 @@
 <template>
-  <div>statistic
-    <Nav></Nav>
+  <div>
+    <Layout>statistic</Layout>
   </div>
 </template>
 
@@ -9,7 +9,3 @@ export default {
   name: 'Statistic',
 };
 </script>
-
-<style scoped lang="scss">
-
-</style>
