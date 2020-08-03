@@ -50,7 +50,7 @@ nav{
 }
 .router-link-active {
   color: #42b983;
-  box-shadow: inset 0 0 20px 4px rgba(116,185,255,.2);
+  box-shadow: inset 0 0 20px 4px rgba(116,185,255,.35);
 }
 
 </style>
