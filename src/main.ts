@@ -4,7 +4,6 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import Layout from '@/components/Layout.vue';
-
 Vue.config.productionTip = false
 Vue.component('Layout',Layout)
 new Vue({

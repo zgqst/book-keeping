@@ -17,6 +17,5 @@ module.exports = {
         extract:false,
         symbolId: 'icon-[name]'
       })
-      .end()
   }
 }
