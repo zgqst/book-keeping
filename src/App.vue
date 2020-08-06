@@ -1,21 +1,13 @@
 <template>
   <div id="app">
-    <Layout v-if="exist">
-      <router-view/>
-    </Layout>
-    <router-view name="NotFound" v-else-if="!exist" ></router-view>
+      <router-view ></router-view>
   </div>
 </template>
 
 <script>
 
-export default {
-  computed: {
-    exist() {
-      return this.$route.matched[0].path !== '*';
-    }
-  }
-}
+export default {}
+
 </script>
 
 <style lang="scss">
@@ -23,7 +15,11 @@ export default {
 @import "~@/assets/style/helper.scss";
 
 #app {
+  position: relative;
   line-height: 1.5;
   font-family: $font-hei;
+  overflow: hidden;
 }
+
+
 </style>

@@ -1,4 +1,0 @@
- <router-link to="/labels" class="nav-item" tag="div">
-      <Icon name="labels"></Icon>
-      <p>标签</p>
-    </router-link>

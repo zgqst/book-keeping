@@ -1,6 +1,7 @@
 <template>
   <div>
-   statistic
+    <Layout> statistic
+    </Layout>
   </div>
 </template>
 

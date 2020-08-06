@@ -1,6 +1,7 @@
 <template>
-  <div id="main-part">
+  <div id="wrapper">
     <div class="upper">
+      <div class="back"></div>
       <div class="top">
         <span class="logo">爱记账</span>
         <div class="time">
@@ -34,29 +35,38 @@ export default {
 <style scoped lang="scss">
 @import "~@/assets/style/helper.scss";
 
-#main-part {
+#wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: $font-hei;
 
   .upper {
     display: flex;
     flex-direction: column;
     padding-top: 3px;
-    background: #ffb8b8;
     color: $color-font;
-
+    position: relative;
+    .back{
+      background:url("~@/assets/images/upper.jpg") no-repeat;
+      z-index: -1;
+      background-size: cover;
+      filter: blur(2px)  brightness(90%);;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
     .top {
       padding: 5px 0 5px 20px;
       display: flex;
       font-size: $font-size*1.4;
-      border-bottom: 1px solid #656464;
+      border-bottom: 1px solid #fff;
 
       .time {
         margin-left: 20px;
         padding-left: 25px;
-        border-left: 1px solid;
+        border-left: 1px solid ;
         display: flex;
       }
     }
@@ -97,10 +107,9 @@ export default {
       }
     }
   }
-
-  .above {
+  .above{
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
   }
 }
 </style>

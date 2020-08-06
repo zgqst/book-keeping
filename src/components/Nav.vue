@@ -1,14 +1,17 @@
 <template>
   <nav class="nav">
-    <div class="trans" ref="qqq"></div>
-    <router-link to="/detail" class="nav-item" tag="div" @click.native="goTo('.item1')">
-      <Icon name="detail" class="icon"></Icon>
-      <div class="item1" style="display: inline-block;">明细
+    <router-link to="/detail" class="nav-item" tag="div" >
+      <div class="item">
+        <Icon name="detail" class="icon"></Icon>
+        <div  style="display: inline-block;">明细
+        </div>
       </div>
     </router-link>
-    <router-link to="/statistic" class="nav-item" tag="div" @click.native="goTo('.item2')">
-      <Icon name="statistic"></Icon>
-      <div class="item2" style="display: inline-block;">统计</div>
+    <router-link to="/statistic" class="nav-item" tag="div" >
+      <div class="item">
+        <Icon name="statistic"></Icon>
+        <div  style="display: inline-block;">统计</div>
+      </div>
     </router-link>
   </nav>
 </template>
@@ -21,26 +24,6 @@ export default {
   components: {
     Icon,
   },
-  mounted() {
-    if (this.$route.path.indexOf('detail') === -1) {
-      this.goTo('.item2');
-    } else {
-      this.goTo('.item1');
-    }
-  },
-  methods: {
-    goTo(item) {
-      const trans = document.querySelector('.trans');
-      const nav = document.querySelector('nav');
-      const div = document.querySelector(`${item}`);
-      const top = div.getBoundingClientRect().bottom - nav.getBoundingClientRect().top;
-      const width = div.clientWidth;
-      const left = div.getBoundingClientRect().left;
-      trans.style.top = top + 'px';
-      trans.style.left = left - 40 + 'px';
-      trans.style.width = width + 50 + 'px';
-    },
-  },
 };
 </script>
 
@@ -51,7 +34,6 @@ nav {
   display: flex;
   flex-direction: row;
   font-family: $font-hei;
-  position: relative;
   box-shadow: 0 14px 7px -18px #000;
 
   .nav-item {
@@ -59,20 +41,25 @@ nav {
     color: #2c3e50;
     font-weight: bold;
     font-size: $font-size*1.5;
-    display: flex;
     width: 50%;
-    justify-content: center;
-    align-items: center;
+    height: 45px;
     padding-top: 3px;
     padding-bottom: 3px;
     cursor: pointer;
+    position: relative;
+    .item{
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      display: flex;
+      transform: translatex(-50%);
+    }
   }
 }
-
-.trans {
-  border-bottom: 2px solid;
-  position: absolute;
-  transition: all .3s;
+.router-link-active{
+ .item{
+   border-bottom: 2px solid ;
+ }
 }
 
 </style>
