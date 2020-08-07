@@ -9,7 +9,7 @@
     </Layout>
     <div id="detail-add">
       <transition name="slide">
-       <router-view></router-view>
+        <router-view></router-view>
       </transition>
     </div>
   </div>
@@ -45,7 +45,7 @@ export default {
   }
 
   .slide-enter-active, .slide-leave-active {
-    transition: all .3s
+    transition: all .3s ease-in-out;
   }
 }
 
