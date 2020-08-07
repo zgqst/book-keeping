@@ -17,14 +17,11 @@
 </template>
 
 <script lang="ts">
-import Icon from '@/components/Icon.vue';
+import {Vue,Component} from 'vue-property-decorator';
+@Component
+export default class Nav extends Vue{
 
-export default {
-  name: 'Nav',
-  components: {
-    Icon,
-  },
-};
+}
 </script>
 
 <style scoped lang="scss">

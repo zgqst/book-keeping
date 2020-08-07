@@ -22,14 +22,16 @@
 </template>
 
 <script lang="ts">
+import {Vue,Component} from 'vue-property-decorator';
 import Nav from '@/components/Nav.vue';
 
-export default {
-  name: 'Layout',
-  components: {
-    Nav,
-  },
-};
+@Component({
+  components:{
+    Nav
+  }
+}) export default class Layout extends Vue {
+
+}
 </script>
 
 <style scoped lang="scss">
@@ -46,17 +48,19 @@ export default {
     padding-top: 3px;
     color: $color-font;
     position: relative;
-    .back{
-      background:url("~@/assets/images/upper.jpg") no-repeat;
+
+    .back {
+      background: url("~@/assets/images/upper.jpg") no-repeat;
       z-index: -1;
       background-size: cover;
-      filter: blur(2px)  brightness(90%);;
+      filter: blur(2px) brightness(90%);;
       position: absolute;
       width: 100%;
       height: 100%;
       top: 0;
       left: 0;
     }
+
     .top {
       padding: 5px 0 5px 20px;
       display: flex;
@@ -65,8 +69,8 @@ export default {
 
       .time {
         margin-left: 20px;
-        padding-left: 25px;
-        border-left: 1px solid ;
+        padding-left: 50px;
+        border-left: 1px solid;
         display: flex;
       }
     }
@@ -74,7 +78,7 @@ export default {
     .money {
       padding: 5px 30px 10px 20px;
       font-family: Consolas, monospace;
-      font-size: $font-size*1.3;
+      font-size: $font-size*1.4;
 
       &.money:after {
         content: '';
@@ -84,7 +88,8 @@ export default {
 
       span {
         margin-right: 15px;
-        font-family: $font-hei;
+        font-family: $font-song;
+        font-weight: bold;
       }
 
       .total {
@@ -96,8 +101,8 @@ export default {
         strong {
           margin-left: 2px;
           margin-bottom: -6px;
-          font-family: $font-hei;
-          font-size: $font-size*1.2;
+          font-family: Georgia, "Nimbus Roman No9 L", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif CN", STSong, "AR PL New Sung", "AR PL SungtiL GB", NSimSun, SimSun, "TW\-Sung", "WenQuanYi Bitmap Song", "AR PL UMing CN", "AR PL UMing HK", "AR PL UMing TW", "AR PL UMing TW MBE", PMingLiU, MingLiU, serif;
+          font-size: $font-size*1.4;
         }
       }
 
@@ -107,7 +112,8 @@ export default {
       }
     }
   }
-  .above{
+
+  .above {
     flex-grow: 1;
     overflow: hidden;
   }

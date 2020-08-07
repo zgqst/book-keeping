@@ -1,10 +1,12 @@
 <template>
   <svg class="icon">
-      <use :xlink:href="'#icon-'+name"></use>
-    </svg>
+    <use :xlink:href="'#icon-'+name"></use>
+  </svg>
 </template>
 
 <script lang="ts">
+import {Vue, Component, Prop} from 'vue-property-decorator';
+
 const requireAll = (requireContext: __WebpackModuleApi.RequireContext) =>
     requireContext.keys().map(requireContext);
 const req = require.context('../assets/icons', true, /\.svg$/);
@@ -13,10 +15,10 @@ try {
 } catch (error) {
   console.log(error);
 }
-export default {
-  name: 'Icon',
-  props:['name']
-};
+
+@Component export default class Icon extends Vue {
+  @Prop(String) name: string | undefined;
+}
 </script>
 
 <style scoped lang="scss">

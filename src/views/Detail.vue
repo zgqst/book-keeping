@@ -17,10 +17,10 @@
 
 <script lang="ts">
 import '@/assets/icons/edit.svg';
+import {Vue, Component} from 'vue-property-decorator';
 
-export default {
-  name: 'Detail',
-};
+@Component export default class Detail extends Vue {
+}
 </script>
 <style scoped lang="scss">
 @import "~@/assets/style/helper.scss";
@@ -64,22 +64,14 @@ export default {
   border-radius: 50%;
   border: 2px solid #34ace0;
   background: #34ace0;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   cursor: pointer;
   padding-top: 5px;
   box-shadow: 0 7px 20px -10px #000;
 
   span {
     margin-top: -15px;
-  }
-
-  .icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
   }
 }
 </style>
