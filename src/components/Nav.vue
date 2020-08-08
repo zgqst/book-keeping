@@ -1,25 +1,26 @@
 <template>
   <nav class="nav">
-    <router-link to="/detail" class="nav-item" tag="div" >
+    <router-link to="/detail" class="nav-item" tag="div">
       <div class="item">
         <Icon name="detail" class="icon"></Icon>
-        <div  style="display: inline-block;">明细
+        <div style="display: inline-block;">明细
         </div>
       </div>
     </router-link>
-    <router-link to="/statistic" class="nav-item" tag="div" >
+    <router-link to="/statistic" class="nav-item" tag="div">
       <div class="item">
         <Icon name="statistic"></Icon>
-        <div  style="display: inline-block;">统计</div>
+        <div style="display: inline-block;">统计</div>
       </div>
     </router-link>
   </nav>
 </template>
 
 <script lang="ts">
-import {Vue,Component} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
+
 @Component
-export default class Nav extends Vue{
+export default class Nav extends Vue {
 
 }
 </script>
@@ -44,7 +45,8 @@ nav {
     padding-bottom: 3px;
     cursor: pointer;
     position: relative;
-    .item{
+
+    .item {
       position: absolute;
       left: 50%;
       top: 10%;
@@ -53,10 +55,11 @@ nav {
     }
   }
 }
-.router-link-active{
- .item{
-   border-bottom: 2px solid ;
- }
+
+.router-link-active {
+  .item {
+    border-bottom: 2px solid;
+  }
 }
 
 </style>

@@ -2,37 +2,79 @@
   <div id="numberPad">
     <label>
       <span>备注:</span>
-      <input type="text" placeholder="今天有什么收获呢~" autofocus>
-      <input type="number" value="0" class="result">
+      <input type="text" placeholder="在这里输入备注" v-model="message">
+      <input type="text" :value="output" class="result">
     </label>
     <div class="buttons">
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button class="backspace">
+      <button @click="input">1</button>
+      <button @click="input">2</button>
+      <button @click="input">3</button>
+      <button @click="backspace" class="backspace">
         <Icon name="backspace"></Icon>
       </button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>清空</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>支出</button>
-      <button>再记</button>
-      <button class="point">.</button>
-      <button>0</button>
-      <button>收入</button>
+      <button @click="input">4</button>
+      <button @click="input">5</button>
+      <button @click="input">6</button>
+      <button @click="clear">清空</button>
+      <button @click="input">7</button>
+      <button @click="input">8</button>
+      <button @click="input">9</button>
+      <button @click="saveBack">支出</button>
+      <button @click="save">再记</button>
+      <button @click="input" class="point">.</button>
+      <button @click="input">0</button>
+      <button @click="saveBack">收入</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue,Component} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 
-@Component export default class NumberPad extends Vue{
+@Component export default class NumberPad extends Vue {
+  output = '0';
+  result = '';
+  message = '';
+  input(event: MouseEvent) {
+    const content = (event.target as HTMLButtonElement).textContent as string;
+    if (this.output === '0' && '0123456789'.includes(content)) {
+      this.output = content;
+      return;
+    } else if (this.output.includes('.') && content === '.') {
+      return;
+    } else if (this.output.includes('.') && this.output.slice(-3, -2) === '.') {
+      return;
+    } else if (this.output.length === 16) {
+      return;
+    }
+    this.output += content;
+  }
 
+  backspace() {
+    if (this.output.length === 1) {
+      this.output = '0';
+      return;
+    }
+    this.output = this.output.slice(0, -1);
+  }
+
+  clear() {
+    this.output = '0';
+  }
+
+  saveBack(event: MouseEvent) {
+    const content = (event.target as HTMLButtonElement).textContent as string;
+    if (content === '收入') {
+      this.result = '+' + this.output;
+    } else {
+      this.result = '-' + this.output;
+    }
+    this.save();
+    this.$router.back();
+  }
+  save(){
+    console.log('saved');
+  }
 }
 </script>
 
@@ -60,21 +102,17 @@ import {Vue,Component} from 'vue-property-decorator';
     input {
       height: 90%;
       font-size: 16px;
-      width: 40%;
+      width: 33%;
       border: none;
 
       &.result {
         margin-left: auto;
         text-align: right;
+        width: 50%;
         margin-right: 4%;
-        font-size: $font-size*1.5;
-        &::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-        }
-
-        &::-webkit-outer-spin-button {
-          -webkit-appearance: none;
-        }
+        font-size: $font-size*1.4;
+        color: transparent;
+        text-shadow: 0 0 0 #000;
       }
     }
   }

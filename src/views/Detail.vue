@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts">
-import '@/assets/icons/edit.svg';
 import {Vue, Component} from 'vue-property-decorator';
 
 @Component export default class Detail extends Vue {
