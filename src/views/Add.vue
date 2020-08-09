@@ -1,28 +1,32 @@
 <template>
   <div id="add">
     <router-link to="/detail" class="esc" tag="div">
-      <Icon name="esc"></Icon>
+      <Icon name="esc" ></Icon>
     </router-link>
-    <Tags></Tags>
-    <NumberPad></NumberPad>
+    <Tags :value.sync="tagName"></Tags>
+    <NumberPad :value="tagName"></NumberPad>
   </div>
 </template>
 
 <script lang="ts">
 import NumberPad from '@/components/Add/NumberPad.vue';
 import Tags from '@/components/Add/Tags.vue';
-import {Vue,Component} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
+
 @Component({
-  components:{
+  components: {
     NumberPad,
     Tags
   }
 })
-export default class Add extends Vue{
-  }
+export default class Add extends Vue {
+  tagName='';
+}
+
 </script>
 
 <style scoped lang="scss">
+
 #add {
   position: relative;
   display: flex;
@@ -30,6 +34,11 @@ export default class Add extends Vue{
   width: 100vw;
   height: 100vh;
   background-color: #ffffff;
+
+  .date {
+    position: relative;
+    top: 50px;
+  }
 
   .esc {
     width: 100vw;

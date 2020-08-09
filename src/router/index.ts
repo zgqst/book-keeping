@@ -4,6 +4,8 @@ import Detail from '@/views/Detail.vue';
 import Statistic from '@/views/Statistic.vue';
 import NotFound from '@/views/NotFound.vue';
 import Add from '@/views/Add.vue';
+import Pay from '@/components/Add/Tags.js';
+import Gain from '@/components/Add/Gain.vue';
 
 Vue.use(VueRouter);
 
@@ -18,8 +20,8 @@ const routes: Array<RouteConfig> = [
       children:[
         {
           path: 'add',
-          component: Add
-        },
+          component: Add,
+        }
       ]
     }
     ,

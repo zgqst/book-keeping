@@ -1,8 +1,11 @@
 <template>
   <div id="numberPad">
+    <a-date-picker class="date" :locale="date.locale" :defaultValue="date.now" :format="date.format"
+                   @change="getDate"></a-date-picker>
+
     <label>
       <span>备注:</span>
-      <input type="text" placeholder="在这里输入备注" v-model="message">
+      <input type="text" placeholder="在这里输入备注" v-model="tempMessage">
       <input type="text" :value="output" class="result">
     </label>
     <div class="buttons">
@@ -19,22 +22,72 @@
       <button @click="input">7</button>
       <button @click="input">8</button>
       <button @click="input">9</button>
-      <button @click="saveBack">支出</button>
-      <button @click="save">再记</button>
+      <button @click="save">支出</button>
       <button @click="input" class="point">.</button>
-      <button @click="input">0</button>
-      <button @click="saveBack">收入</button>
+      <button @click="input" class="zero">0</button>
+      <button @click="save">收入</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
+import DatePicker from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+import moment from 'moment';
+import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN.js';
 
+Vue.use(DatePicker);
+
+interface Record {
+  year: number | undefined;
+  month: number | undefined;
+  date: number | undefined;
+  tag: string;
+  message: string;
+  type: string;
+  amount: string;
+}
+
+interface DatePicker {
+  now: any;
+  format: string;
+  locale: object;
+}
+
+window.localStorage.setItem('version', '1.0.0');
 @Component export default class NumberPad extends Vue {
+  date: DatePicker = {
+    now: moment(),
+    format: 'YYYY/MM/DD',
+    locale: locale
+  };
+
+  record: Record = {
+    year: undefined,
+    month: undefined,
+    date: undefined,
+    tag: '',
+    message: '',
+    type: '',
+    amount: ''
+  };
   output = '0';
-  result = '';
-  message = '';
+  tempYear = moment().year();
+  tempMonth = moment().month() + 1;
+  tempDate = moment().date();
+  tempType = '';
+  tempMessage = '';
+  recordList: Record[] = [];
+
+  @Prop(String) value!: string;
+
+  getDate(time: any) {
+    this.tempYear = time.year();
+    this.tempMonth = time.month() + 1;
+    this.tempDate = time.date();
+  }
+
   input(event: MouseEvent) {
     const content = (event.target as HTMLButtonElement).textContent as string;
     if (this.output === '0' && '0123456789'.includes(content)) {
@@ -62,18 +115,32 @@ import {Vue, Component} from 'vue-property-decorator';
     this.output = '0';
   }
 
-  saveBack(event: MouseEvent) {
+  save(event: MouseEvent) {
     const content = (event.target as HTMLButtonElement).textContent as string;
-    if (content === '收入') {
-      this.result = '+' + this.output;
-    } else {
-      this.result = '-' + this.output;
+    if (this.output === '0') {
+      alert('添加失败！金额为空！');
+      return;
     }
-    this.save();
-    this.$router.back();
+    if (content === '收入') {
+      this.tempType = '+';
+    } else {
+      this.tempType = '-';
+    }
+    this.record.type = this.tempType;
+    this.record.tag = this.value;
+    this.record.amount = this.output;
+    this.record.year = this.tempYear;
+    this.record.month = this.tempMonth;
+    this.record.date = this.tempDate;
+    this.record.message = this.tempMessage;
+    const copy ={...this.record}
+    this.recordList.push(copy);
+    this.output = '0';
+    this.tempMessage='';
   }
-  save(){
-    console.log('saved');
+  @Watch('recordList')
+  onRecordListChange(){
+    window.localStorage.setItem('recordList',JSON.stringify(this.recordList))
   }
 }
 </script>
@@ -88,11 +155,16 @@ import {Vue, Component} from 'vue-property-decorator';
   border-top: 1px solid #c1c0c0;
   box-shadow: 0 -2px 8px -5px #000;
 
+  .date {
+    height: 10%;
+
+  }
+
   label {
     display: flex;
     align-items: center;
     margin-left: 2%;
-    height: 20%;
+    height: 15%;
 
     span {
       display: block;
@@ -120,7 +192,7 @@ import {Vue, Component} from 'vue-property-decorator';
   .buttons {
     @extend %clearFix;
 
-    height: 80%;
+    height: 75%;
     display: flex;
     flex-wrap: wrap;
 
@@ -135,6 +207,10 @@ import {Vue, Component} from 'vue-property-decorator';
       border-radius: 4px;
       box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
       -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+
+      &.zero {
+        width: 47%;
+      }
 
       &.point {
         font-weight: bold;

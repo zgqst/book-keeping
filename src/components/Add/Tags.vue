@@ -14,7 +14,7 @@
           <div class="icon-wrapper">
             <Icon name="add"></Icon>
           </div>
-     添加
+          添加
         </div>
       </li>
     </ul>
@@ -22,9 +22,9 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 
-@Component export default class Tags extends Vue {
+@Component export default class Pay extends Vue {
 
   tagList: { name: string; icon: string }[] = [{name: '三餐', icon: 'meal'}, {name: '零食', icon: 'snack'}, {
     name: '衣服',
@@ -34,9 +34,13 @@ import {Vue, Component} from 'vue-property-decorator';
     icon: 'child'
   }, {name: '宠物', icon: 'cat'}, {name: '银行', icon: 'bank'}, {name: '交通', icon: 'car'}];
 
+  @Prop(String) value = '';
+
   choose(event: MouseEvent) {
     const icon = (event.currentTarget as HTMLDivElement).firstElementChild as HTMLElement;
     const allIcon = document.querySelectorAll('.icon-wrapper');
+    const tagName = ((event.currentTarget as HTMLDivElement).lastChild as Text).data.trim();
+    this.$emit('update:value', tagName);
     if (icon.className === 'icon-wrapper') {
       for (let i = 0; i < allIcon.length - 1; i++) {
         allIcon[i].className = 'icon-wrapper';
@@ -48,8 +52,10 @@ import {Vue, Component} from 'vue-property-decorator';
   addNewTag() {
     const newTag = {name: '', icon: ''};
     newTag.name = prompt('输入标签内容') as string;
-    if (!newTag.name) {
+    if (newTag.name === '') {
       alert('添加失败！内容不可以为空');
+      return;
+    } else if (!newTag.name) {
       return;
     }
     for (let i = 0; i < this.tagList.length - 1; i++) {
@@ -68,7 +74,7 @@ import {Vue, Component} from 'vue-property-decorator';
 @import "~@/assets/style/helper.scss";
 
 #tags {
-  height: 100%;
+  height: 80%;
 
   ul {
     display: flex;
