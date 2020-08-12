@@ -44,7 +44,7 @@ import {Vue, Component} from 'vue-property-decorator';
   }
 
   .slide-enter-active, .slide-leave-active {
-    transition: all .3s ease-in-out;
+    transition: all .1s ease-in-out;
   }
 }
 

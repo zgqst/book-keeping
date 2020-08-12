@@ -2,7 +2,6 @@
   <div id="numberPad">
     <a-date-picker class="date" :locale="date.locale" :defaultValue="date.now" :format="date.format"
                    @change="getDate"></a-date-picker>
-
     <label>
       <span>备注:</span>
       <input type="text" placeholder="在这里输入备注" v-model="tempMessage">
@@ -35,22 +34,13 @@ import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import DatePicker from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import moment from 'moment';
-import locale from 'ant-design-vue/lib/date-picker/locale/zh_CN.js';
+import recordListModel from '@/models/recordListModel';
 
+const locale = require('ant-design-vue/lib/date-picker/locale/zh_CN.js').default;
 Vue.use(DatePicker);
 
-interface Record {
-  year: number | undefined;
-  month: number | undefined;
-  date: number | undefined;
-  tag: string;
-  message: string;
-  type: string;
-  amount: string;
-}
-
 interface DatePicker {
-  now: any;
+  now: object;
   format: string;
   locale: object;
 }
@@ -63,7 +53,7 @@ window.localStorage.setItem('version', '1.0.0');
     locale: locale
   };
 
-  record: Record = {
+  record: RecordItem = {
     year: undefined,
     month: undefined,
     date: undefined,
@@ -78,7 +68,7 @@ window.localStorage.setItem('version', '1.0.0');
   tempDate = moment().date();
   tempType = '';
   tempMessage = '';
-  recordList: Record[] = [];
+  recordList: RecordItem[] = recordListModel.fetch();
 
   @Prop(String) value!: string;
 
@@ -128,19 +118,24 @@ window.localStorage.setItem('version', '1.0.0');
     }
     this.record.type = this.tempType;
     this.record.tag = this.value;
+    if (!this.record.tag) {
+      alert('请选择标签');
+      return;
+    }
     this.record.amount = this.output;
     this.record.year = this.tempYear;
     this.record.month = this.tempMonth;
     this.record.date = this.tempDate;
     this.record.message = this.tempMessage;
-    const copy ={...this.record}
-    this.recordList.push(copy);
+    this.recordList.push(recordListModel.clone(this.record));
     this.output = '0';
-    this.tempMessage='';
+    this.tempMessage = '';
+    this.$router.back();
   }
+
   @Watch('recordList')
-  onRecordListChange(){
-    window.localStorage.setItem('recordList',JSON.stringify(this.recordList))
+  onRecordListChange() {
+    recordListModel.save(this.recordList);
   }
 }
 </script>
@@ -149,9 +144,10 @@ window.localStorage.setItem('version', '1.0.0');
 @import '~@/assets/style/helper.scss';
 
 #numberPad {
-  height: 70%;
+  height: 40vh;
   position: relative;
   bottom: 0;
+  background: #fff;
   border-top: 1px solid #c1c0c0;
   box-shadow: 0 -2px 8px -5px #000;
 

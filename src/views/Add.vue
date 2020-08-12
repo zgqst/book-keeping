@@ -42,6 +42,7 @@ export default class Add extends Vue {
 
   .esc {
     width: 100vw;
+    height:8vh;
     font-size: 20px;
     position: absolute;
     padding-top: 10px;
