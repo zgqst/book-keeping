@@ -53,6 +53,5 @@ export default class Add extends Vue {
     cursor: pointer;
     background: #48dbfb;
   }
-
 }
 </style>

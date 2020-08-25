@@ -1,10 +1,10 @@
 <template>
   <div id="numberPad">
-    <a-date-picker class="date" :locale="date.locale" :defaultValue="date.now" :format="date.format"
-                   @change="getDate"></a-date-picker>
+    <a-date-picker class="date" :defaultValue="date.now" :format="date.format"
+                 :locale="date.locale"  @change="getDate"></a-date-picker>
     <label>
       <span>备注:</span>
-      <input type="text" placeholder="在这里输入备注" v-model="tempMessage">
+      <input type="text" placeholder="在这里输入备注" v-model="record.message">
       <input type="text" :value="output" class="result">
     </label>
     <div class="buttons">
@@ -30,52 +30,42 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
-import DatePicker from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import {Vue, Component, Prop} from 'vue-property-decorator';
+
 import moment from 'moment';
-import recordListModel from '@/models/recordListModel';
+import {default as swal} from 'sweetalert2';
+import locale from '@/zh-CN';
 
-const locale = require('ant-design-vue/lib/date-picker/locale/zh_CN.js').default;
-Vue.use(DatePicker);
-
-interface DatePicker {
-  now: object;
-  format: string;
-  locale: object;
-}
 
 window.localStorage.setItem('version', '1.0.0');
 @Component export default class NumberPad extends Vue {
   date: DatePicker = {
     now: moment(),
     format: 'YYYY/MM/DD',
-    locale: locale
+    locale:locale
   };
 
   record: RecordItem = {
-    year: undefined,
-    month: undefined,
-    date: undefined,
+    time: moment().format(),
     tag: '',
     message: '',
     type: '',
     amount: ''
   };
   output = '0';
-  tempYear = moment().year();
-  tempMonth = moment().month() + 1;
-  tempDate = moment().date();
-  tempType = '';
-  tempMessage = '';
-  recordList: RecordItem[] = recordListModel.fetch();
 
-  @Prop(String) value!: string;
+  get recordList() {
+    return this.$store.getters.recordList();
+  }
+
+  @Prop(String) value!: string;//传入的tag信息
 
   getDate(time: any) {
-    this.tempYear = time.year();
-    this.tempMonth = time.month() + 1;
-    this.tempDate = time.date();
+    if(!time){
+      this.record.time = time;
+      return;
+    }
+    this.record.time = time.format();
   }
 
   input(event: MouseEvent) {
@@ -108,43 +98,69 @@ window.localStorage.setItem('version', '1.0.0');
   save(event: MouseEvent) {
     const content = (event.target as HTMLButtonElement).textContent as string;
     if (this.output === '0') {
-      alert('添加失败！金额为空！');
+      swal.fire({
+        text:'添加失败！金额为空！',
+        width:300,
+        confirmButtonText:'确认',
+        showClass: {
+          popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        },
+      });
       return;
     }
     if (content === '收入') {
-      this.tempType = '+';
+      this.record.type = '+';
     } else {
-      this.tempType = '-';
+      this.record.type = '-';
     }
-    this.record.type = this.tempType;
     this.record.tag = this.value;
     if (!this.record.tag) {
-      alert('请选择标签');
+      swal.fire({
+        text:'请选择标签！',
+        width:300,
+        confirmButtonText:'确认',
+        showClass: {
+          popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        },
+      });
+      return;
+    }
+    if (!this.record.time) {
+      swal.fire({
+        text:'请选择日期！',
+        width:300,
+        confirmButtonText:'确认',
+        showClass: {
+          popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        },
+      });
       return;
     }
     this.record.amount = this.output;
-    this.record.year = this.tempYear;
-    this.record.month = this.tempMonth;
-    this.record.date = this.tempDate;
-    this.record.message = this.tempMessage;
-    this.recordList.push(recordListModel.clone(this.record));
-    this.output = '0';
-    this.tempMessage = '';
-    this.$router.back();
-  }
-
-  @Watch('recordList')
-  onRecordListChange() {
-    recordListModel.save(this.recordList);
+    this.recordList.push(this.record)
+    this.$store.commit('updateRecordList', this.recordList);
+    this.$store.commit('getDetailList');
+    //解决添加记录后detailList不会自动计算的问题，需要手动计算一下
+    this.$router.push('/detail');
   }
 }
 </script>
 
 <style scoped lang="scss">
 @import '~@/assets/style/helper.scss';
+@import "~animate.css";
 
 #numberPad {
-  height: 40vh;
+  height: 40%;
   position: relative;
   bottom: 0;
   background: #fff;

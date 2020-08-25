@@ -23,11 +23,12 @@
 
 <script lang="ts">
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import tagListModel from '@/models/tagListModel';
 
 @Component export default class Tags extends Vue {
 
-  tagList: TagObj[] = tagListModel.fetch();
+  get tagList() {
+    return this.$store.getters.tagList();
+  }
 
   @Prop(String) value = '';
 
@@ -37,7 +38,7 @@ import tagListModel from '@/models/tagListModel';
     const tagName = ((event.currentTarget as any).lastChild as any).textContent.trim();
     this.$emit('update:value', tagName);
     if (icon.className === 'icon-wrapper') {
-      for (let i = 0; i < allIcon.length - 1; i++) {
+      for (let i = 0; i < allIcon.length; i++) {
         allIcon[i].className = 'icon-wrapper';
       }
       icon.className = 'icon-wrapper selected';
@@ -55,7 +56,7 @@ import tagListModel from '@/models/tagListModel';
 @import "~@/assets/style/helper.scss";
 
 #tags {
-  height: 60vh;
+  height: 60%;
   overflow: auto;
 
   ul {

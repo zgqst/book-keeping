@@ -19,6 +19,7 @@ export default {}
   line-height: 1.5;
   font-family: $font-hei;
   overflow: hidden;
+  height: 100vh;
 }
 
 

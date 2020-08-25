@@ -5,6 +5,7 @@ import Statistic from '@/views/Statistic.vue';
 import NotFound from '@/views/NotFound.vue';
 import Add from '@/views/Add.vue';
 import Labels from '@/components/Add/Labels.vue';
+import EditLabel from '@/components/EditLabel.vue';
 
 Vue.use(VueRouter);
 
@@ -23,9 +24,15 @@ const routes: Array<RouteConfig> = [
       }
     ]
   }
-  , {
+  ,
+  {
     path: '/detail/add/labels',
     component: Labels
+  }
+  ,
+  {
+    path: '/detail/:tagName',
+    component: EditLabel
   }
   ,
   {

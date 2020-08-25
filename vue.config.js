@@ -1,6 +1,9 @@
 const path = require('path')
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/book-keeping-website/'
+    : '/',
   lintOnSave: false,
   chainWebpack: config => {
     config.module.rules.delete("svg");
@@ -14,7 +17,7 @@ module.exports = {
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-        extract:false,
+        extract: false,
         symbolId: 'icon-[name]'
       })
   }

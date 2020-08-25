@@ -78,7 +78,8 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
-import tagListModel from '@/models/tagListModel';
+import {default as swal} from 'sweetalert2';
+
 
 @Component export default class Labels extends Vue {
   newTag: TagObj = {name: '', icon: ''};
@@ -117,34 +118,69 @@ import tagListModel from '@/models/tagListModel';
     const allIcon = document.querySelectorAll('.icon-wrapper');
     const tagName = ((event.currentTarget as any).lastChild as any).textContent.trim();
     if (icon.className === 'icon-wrapper') {
-      for (let i = 0; i < allIcon.length - 1; i++) {
+      for (let i = 0; i < allIcon.length; i++) {
         allIcon[i].className = 'icon-wrapper';
       }
       icon.className = 'icon-wrapper selected';
     }
     for (const key in this.labels) {
-      const value = this.labels[key].filter((item) => {
-        return tagName === item.name;
+      const temp = this.labels[key].find((item: TagObj) => {
+        return item.name === tagName;
       });
-      if (value[0]) {
-        this.newTag = value[0];
+      if (temp) {
+        this.newTag = temp;
       }
     }
   }
 
   ok() {
-    const temp = tagListModel.clone(this.newTag);
-    if(!temp.name){
-      alert('请选择标签！');
+    const temp = {...this.newTag};
+    if (!temp.name) {
+      swal.fire({
+        text: '请选择标签！',
+        width: 300,
+        confirmButtonText: '确认',
+        showClass: {
+          popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
+      });
       return;
     }
     try {
-      tagListModel.mergeAndSave(temp);
+      this.$store.commit('updateTadList', temp);
     } catch (error) {
-      alert(`${error.message}`);
+      swal.fire({
+        text: `${error.message}`,
+        width: 300,
+        confirmButtonText: '确认',
+        showClass: {
+          popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOut animate__faster'
+        }
+      });
       return;
     }
-    this.$router.back();
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const _self = this;
+    swal.fire({
+      text: `添加成功！`,
+      width: 300,
+      confirmButtonText: '确认',
+      showClass: {
+        popup: 'animate__animated animate__fadeIn animate__faster'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOut animate__faster'
+      },
+      onClose: function () {
+        _self.$router.back();
+      }
+    });
   }
 
 
@@ -152,6 +188,7 @@ import tagListModel from '@/models/tagListModel';
 </script>
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+@import "~animate.css";
 
 #labels {
   height: 100vh;
